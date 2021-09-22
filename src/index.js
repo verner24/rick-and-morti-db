@@ -1,4 +1,4 @@
-const { TABLE_NAME, PAGES, insertText } = require('./const');
+const { TABLE_NAME, PAGES } = require('./const');
 const { getCharacters } = require('./api');
 const { client } = require('./db');
 client.connect();
@@ -23,6 +23,7 @@ const createTableText = `CREATE TABLE ${TABLE_NAME}(
     const { data: { results }} = await getCharacters(i);
 
     for (const result of results) {
+      const insertText = `INSERT INTO ${TABLE_NAME}(name, data) VALUES($1, $2) RETURNING *`;
       const values = [result.name, result];
 
       try {
