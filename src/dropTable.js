@@ -11,4 +11,5 @@ const dropTableText = `DROP TABLE ${TABLE_NAME}`;
   } catch (err) {
     console.log(err.stack)
   }
+  client.end();
 })();

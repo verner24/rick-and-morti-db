@@ -3,7 +3,7 @@ const { getCharacters } = require('./api');
 const { client } = require('./db');
 client.connect();
 
-const createTableText = `CREATE TABLE ${TABLE_NAME}(
+const createTableText = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME}(
   id serial,
   name text NOT NULL,
   data jsonb NOT NULL,
@@ -20,7 +20,7 @@ const createTableText = `CREATE TABLE ${TABLE_NAME}(
   }
 
   for (let i = 1; i <= PAGES; i++) {
-    const { data: { results }} = await getCharacters(i);
+    const { data: { results } } = await getCharacters(i);
 
     for (const result of results) {
       const insertText = `INSERT INTO ${TABLE_NAME}(name, data) VALUES($1, $2) RETURNING *`;
@@ -33,6 +33,6 @@ const createTableText = `CREATE TABLE ${TABLE_NAME}(
       }
     }
   }
-
   console.log('end script');
+  client.end();
 })();
